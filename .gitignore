@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Dados experimentais
+data/alumni/*
+data/EmoDB/*
+data/general/*
+data/RAVDESS_songs/*
+data/RAVDESS_speeches/*
+data/Soundtracks/*
+
+# Informações gerais
+!data/alumni/README.md
+!data/EmoDB/README.md
+!data/general/README.md
+!data/RAVDESS_songs/README.md
+!data/RAVDESS_speeches/README.md
+!data/Soundtracks/README.md
+
+# Modelos
+models/
