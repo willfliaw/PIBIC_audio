@@ -60,12 +60,7 @@ def eval_pretrained_model(hub, categorical_predictions, database):
     utils.plot_confusion_matrix(np.argmax(test_y, axis = 1), data["predictions"], list(utils.TRANSLATIONS.keys()), os.path.join(utils.PRETRAINED_MODELS_PATH, hub.split("/")[-1].split("-")[0], hub.split("/")[-1].split("-")[1], database), name = database)
 
 if __name__ == "__main__":
-  # for hub in utils.MODELS_HUB:
-  #   for db in utils.OUTPUTS:
-  #     trans_labels = test_pretrained(hub, db)
-  #     eval_pretrained_model(hub, trans_labels, db)
-  hub = "superb/hubert-base-superb-er"
-  db = "emodb"
-  trans_labels = test_pretrained(hub, db)
-  trans_labels = utils.load_from_file(os.path.join(utils.PRETRAINED_MODELS_PATH, hub.split("/")[-1].split("-")[0], hub.split("/")[-1].split("-")[1], db, "preds.pkl"))
-  eval_pretrained_model(hub, trans_labels, db)
+  for hub in utils.MODELS_HUB:
+    for db in utils.OUTPUTS:
+      trans_labels = test_pretrained(hub, db)
+      eval_pretrained_model(hub, trans_labels, db)
