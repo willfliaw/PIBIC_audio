@@ -26,7 +26,7 @@ def test_model(model_database, sel, mod, test_database):
   elif sel == test_database + "_pca.csv":
     X_sel = pd.read_csv(os.path.join(utils.DESIRED_FEATURES_PATH, model_database, sel), index_col = 0)
     if test_database != "alumni":
-      X_sel = X_sel[pd.Series(test_info[next(iter(utils.OUTPUTS[database]))][i] in utils.OUTPUTS[database][next(iter(utils.OUTPUTS[database]))] for i, _ in test_info.iterrows())]
+      X_sel = X_sel[pd.Series(test_info[next(iter(utils.OUTPUTS[model_database]))][i] in utils.OUTPUTS[model_database][next(iter(utils.OUTPUTS[model_database]))] for i, _ in test_info.iterrows())]
 
   os.makedirs(os.path.join(utils.MODELS_PATH, model_database, sel[:-4], mod, "preds"), exist_ok = True)
   model = load_model(os.path.join(utils.MODELS_PATH, model_database, sel[:-4], mod), compile = True)
@@ -51,7 +51,6 @@ def test_model(model_database, sel, mod, test_database):
 
 def eval_model(model_database, sel, mod, predictions, test_database):
   if test_database == "alumni":
-    categorical_predictions = pd.read_csv(os.path.join(utils.MODELS_PATH, model_database, sel[:-4], "dnn_cv", "preds", "alumni.csv"), index_col = 0).dropna()
     utils.plot_alumni(model_database, sel, mod, predictions)
   else:
     test_info = pd.read_csv(os.path.join(utils.DATA_PATH, "general", "info", test_database + "_info.csv"), index_col = 0).dropna()

@@ -10,9 +10,7 @@ from tqdm import tqdm
 from utils.config import DATA_PATH, SEGMENT_DURATION, SR
 
 def read_alumni(sr = SR, segment_duration = SEGMENT_DURATION):
-    speeches = []
-    names = []
-    locations = []
+    speeches, names, locations = list(), list(), list()
 
     for fn in tqdm(np.asarray(os.listdir(os.path.join(DATA_PATH, "alumni", "audios"))), ncols = 50):
         offset = 0
@@ -36,7 +34,7 @@ def read_alumni(sr = SR, segment_duration = SEGMENT_DURATION):
     location = pd.DataFrame({"Location": locations})
     info = info.join(location)
 
-    sexes = []
+    sexes = list()
     coded_sexes = {"andre": "Male",
                    "bruna": "Female",
                    "bruno": "Male",
@@ -57,26 +55,26 @@ def read_alumni(sr = SR, segment_duration = SEGMENT_DURATION):
 
     return info, speeches
 
-def read_emodb(sr = SR):
-  speeches = []
-  names = []
-  durations = []
+def read_emodb(sr = SR, pad = False, trunc = False):
+  speeches, names, durations = list(), list(), list()
 
   for fn in tqdm(np.asarray(os.listdir(os.path.join(DATA_PATH, "EmoDB", "wav"))), ncols = 50):
     path = os.path.join(DATA_PATH, "EmoDB", "wav", fn)
-    speech, sr = librosa.load(path, sr = sr, mono = True)
+    if not trunc:
+      speech, sr = librosa.load(path, sr = sr, mono = True)
+    else:
+      speech, sr = librosa.load(path, sr = sr, mono = True, duration = SEGMENT_DURATION)
     indexes = librosa.effects.split(speech, top_db = 60)
     speech = np.array([num for arr in (speech[i[0]:i[1]] for i in indexes) for num in arr.tolist()])
+    if pad and len(speech) < SEGMENT_DURATION*sr:
+        speech = np.array([speech[i] if i < len(speech) else 0. for i in range(SEGMENT_DURATION*sr)])
     speeches.append(speech)
     names.append(fn[: -4])
     durations.append(len(speech)/sr)
 
   info = pd.DataFrame({"File Name": names})
 
-  sexes = []
-  ages = []
-  texts = []
-  emotions = []
+  sexes, ages, texts, emotions = list(), list(), list(), list()
 
   coded_actors = {
     "03": ["Male",    31],
@@ -134,32 +132,29 @@ def read_emodb(sr = SR):
 
   return info, speeches
 
-def read_ravdess_songs(sr = SR):
-  speeches = []
-  names = []
-  durations = []
+def read_ravdess_songs(sr = SR, pad = False, trunc = False):
+  speeches, names, durations = list(), list(), list()
 
   _, dirs, _ = next(os.walk(os.path.join(DATA_PATH, "RAVDESS_songs")))
   for dirn in tqdm(dirs, ncols = 50):
       if dirn != "img":
           for fn in np.asarray(os.listdir(os.path.join(DATA_PATH, "RAVDESS_songs", dirn))):
               path = os.path.join(DATA_PATH, "RAVDESS_songs", dirn, fn)
-              speech, sr = librosa.load(path, sr = sr, mono = True)
+              if not trunc:
+                speech, sr = librosa.load(path, sr = sr, mono = True)
+              else:
+                speech, sr = librosa.load(path, sr = sr, mono = True, duration = SEGMENT_DURATION)
               indexes = librosa.effects.split(speech, top_db = 60)
               speech = np.array([num for arr in (speech[i[0]:i[1]] for i in indexes) for num in arr.tolist()])
+              if pad and len(speech) < SEGMENT_DURATION*sr:
+                speech = np.array([speech[i] if i < len(speech) else 0. for i in range(SEGMENT_DURATION*sr)])
               speeches.append(speech)
               names.append(fn[: -4])
               durations.append(len(speech)/sr)
 
   info = pd.DataFrame({"File Name": names})
 
-  modalities = []
-  vocal_channels = []
-  emotions = []
-  emotional_intensities = []
-  statements = []
-  repetitions = []
-  sexes = []
+  modalities, vocal_channels, emotions, emotional_intensities, statements, repetitions, sexes = list(), list(), list(), list(), list(), list(), list()
 
   coded_modalities =  {
     "01": "full-AV",
@@ -230,32 +225,29 @@ def read_ravdess_songs(sr = SR):
 
   return info, speeches
 
-def read_ravdess_speeches(sr = SR):
-  speeches = []
-  names = []
-  durations = []
+def read_ravdess_speeches(sr = SR, pad = False, trunc = False):
+  speeches, names, durations = list(), list(), list()
 
   _, dirs, _ = next(os.walk(os.path.join(DATA_PATH, "RAVDESS_speeches")))
   for dirn in tqdm(dirs, ncols = 50):
-      if dirn != "img":
-          for fn in np.asarray(os.listdir(os.path.join(DATA_PATH, "RAVDESS_speeches", dirn))):
-              path = os.path.join(DATA_PATH, "RAVDESS_speeches", dirn, fn)
-              speech, sr = librosa.load(path, sr = sr, mono = True)
-              indexes = librosa.effects.split(speech, top_db = 60)
-              speech = np.array([num for arr in (speech[i[0]:i[1]] for i in indexes) for num in arr.tolist()])
-              speeches.append(speech)
-              names.append(fn[: -4])
-              durations.append(len(speech)/sr)
+    if dirn != "img":
+      for fn in np.asarray(os.listdir(os.path.join(DATA_PATH, "RAVDESS_speeches", dirn))):
+        path = os.path.join(DATA_PATH, "RAVDESS_speeches", dirn, fn)
+        if not trunc:
+          speech, sr = librosa.load(path, sr = sr, mono = True)
+        else:
+          speech, sr = librosa.load(path, sr = sr, mono = True, duration = SEGMENT_DURATION)
+        indexes = librosa.effects.split(speech, top_db = 60)
+        speech = np.array([num for arr in (speech[i[0]:i[1]] for i in indexes) for num in arr.tolist()])
+        if pad and len(speech) < SEGMENT_DURATION*sr:
+          speech = np.array([speech[i] if i < len(speech) else 0. for i in range(SEGMENT_DURATION*sr)])
+        speeches.append(speech)
+        names.append(fn[: -4])
+        durations.append(len(speech)/sr)
 
   info = pd.DataFrame({"File Name": names})
 
-  modalities = []
-  vocal_channels = []
-  emotions = []
-  emotional_intensities = []
-  statements = []
-  repetitions = []
-  sexes = []
+  modalities, vocal_channels, emotions, emotional_intensities, statements, repetitions, sexes = list(), list(), list(), list(), list(), list(), list()
 
   coded_modalities =  {
     "01": "full-AV",
@@ -326,13 +318,17 @@ def read_ravdess_speeches(sr = SR):
 
   return info, speeches
 
-def read_soundtracks(sr = SR):
-  soundtracks = []
-  durations = []
+def read_soundtracks(sr = SR, pad = False, trunc = False):
+  soundtracks, durations = list(), list()
 
   for fn in tqdm(np.asarray(os.listdir(os.path.join(DATA_PATH, "Soundtracks", "Set1"))), ncols = 50):
     path = os.path.join(DATA_PATH, "Soundtracks", "Set1", fn)
-    soundtrack, sr = librosa.load(path, sr = sr, mono = True)
+    if not trunc:
+      soundtrack, sr = librosa.load(path, sr = sr, mono = True)
+    else:
+      soundtrack, sr = librosa.load(path, sr = sr, mono = True, duration = SEGMENT_DURATION)
+    if pad and len(soundtrack) < SEGMENT_DURATION*sr:
+      soundtrack = np.array([soundtrack[i] if i < len(soundtrack) else 0. for i in range(SEGMENT_DURATION*sr)])
     soundtracks.append(soundtrack)
     durations.append(len(soundtrack)/sr)
 
@@ -342,23 +338,23 @@ def read_soundtracks(sr = SR):
 
   return info, soundtracks
 
-def read_datasets(database):
+def read_datasets(database, sr = SR, pad = False, trunc = False):
   if database == "alumni":
-    return read_alumni()
+    return read_alumni(sr)
   elif database == "emodb":
-    return read_emodb()
+    return read_emodb(sr, pad, trunc)
   elif database == "ravdess_songs":
-    return read_ravdess_songs()
+    return read_ravdess_songs(sr, pad, trunc)
   elif database == "ravdess_speeches":
-    return read_ravdess_speeches()
+    return read_ravdess_speeches(sr, pad, trunc)
   elif database == "soundtracks":
-    return read_soundtracks()
+    return read_soundtracks(sr, pad, trunc)
   elif database == "all":
-    alumni_info, alumni_speeches = read_alumni()
-    emodb_info, emodb_speeches = read_emodb()
-    ravdess_songs_info, ravdess_songs = read_ravdess_songs()
-    ravdess_speeches_info, ravdess_speeches = read_ravdess_speeches()
-    soundtracks_info, soundtracks_songs = read_soundtracks()
+    alumni_info, alumni_speeches = read_alumni(sr)
+    emodb_info, emodb_speeches = read_emodb(sr, pad, trunc)
+    ravdess_songs_info, ravdess_songs = read_ravdess_songs(sr, pad, trunc)
+    ravdess_speeches_info, ravdess_speeches = read_ravdess_speeches(sr, pad, trunc)
+    soundtracks_info, soundtracks_songs = read_soundtracks(sr, pad, trunc)
     return [alumni_info, emodb_info, ravdess_songs_info, ravdess_speeches_info, soundtracks_info], [alumni_speeches, emodb_speeches, ravdess_songs, ravdess_speeches, soundtracks_songs]
   else:
     return 0, 0

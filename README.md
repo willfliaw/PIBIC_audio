@@ -22,44 +22,46 @@ O presente repositório destina-se ao armazenamento de arquivos referentes ao pr
 ```bash
 PIBIC_audio
 │   .gitignore
-│   environment.yml
+│   eval_preds.ipynb
 │   README.md
+│   finetune_models.py
+│   preprocess_data.py
+│   pretrained_models.py
+│   select_features.py
+│   test_eval_models.py
+│   train_models.py
+│   environment.yml
 │
 └───data
 │   │
 │   └───alumni
 │   │   │   README.md
-│   │   │   ...
 │   │
 │   └───EmoDB
 │   │   │   README.md
-│   │   │   ...
 │   │
 │   └───general
 │   │   │   README.md
-│   │   │   ...
 │   │
 │   └───RAVDESS_songs
 │   │   │   README.md
-│   │   │   ...
 │   │
 │   └───RAVDESS_speeches
 │   │   │   README.md
-│   │   │   ...
 │   │
 │   └───Soundtracks
 │       │   README.md
-│       │   ...
 │
-└───notebooks
-│   │   file021.txt
 │
 └───utils
-    │   file111.txt
-    │   ...
+    │   __init__.py
+    │   config.py
+    │   dataset_reading.py
+    │   feature_extraction.py
+    │   feature_selection.py
+    │   model_evaluation.py
+    │   models.py
 ```
-
-<!-- INCOMPLETO -->
 
 ## Preliminar
 
@@ -88,7 +90,7 @@ Para executar, testar e contribuir com o material do projeto aqui presente, conv
 2. Pela instalação individual das dependências necessárias:
 
    ```bash
-    conda create -n PIBIC_audio -c conda-forge python ffmpeg ipykernel ipython joblib jupyter keras librosa matplotlib numpy pandas SciencePlots scikit-learn seaborn tensorflow=2.6.0=gpu_py39he88c5ba_0 tensorflow-estimator=2.6.0 tqdm transformers[tf-cpu]
+    conda create -n PIBIC_audio -c conda-forge python datasets ffmpeg ipykernel ipython joblib jupyter keras librosa matplotlib numpy pandas pytorch SciencePlots scikit-learn seaborn tensorflow=2.6.0=gpu_py39he88c5ba_0 tensorflow-estimator=2.6.0 tqdm transformers[tf-cpu]
    ```
 
 Vale frisar que as duas maneiras apresentadas foram concebidas, em 5 jan. 2022, com a intenção de se utilizar a GPU (*Graphics Processing Unit*) da máquina local. Recomenda-se, assim, que o usuário confira em [Install TensorFlow 2](https://www.tensorflow.org/install/) os pré-requisitos para a instalação. Ressalta-se, ainda, que é de importância sobremaneira que os pacotes (*packages*) `tensorflow` e `tensorflow-estimator` apresentem a mesma versão. É interessante que se utilize o comando `conda search -c conda-forge <package>` para averiguar as versões e *builds* disponíveis.

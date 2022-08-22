@@ -19,3 +19,8 @@ data/Soundtracks/*
 
 # Modelos
 models/
+finetunedModels/
+pretrainedModels/
+
+# Miscellaneous
+*.old

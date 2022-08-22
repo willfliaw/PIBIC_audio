@@ -2,20 +2,17 @@
 
 import os
 import pickle
-from pprint import pprint
 
 import numpy as np
 import pandas as pd
-from sklearn import metrics
 from sklearn.decomposition import PCA
 from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier
-from sklearn.feature_selection import RFE, RFECV, SelectKBest, chi2, f_classif
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.feature_selection import RFECV, SelectKBest, chi2, f_classif
+from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
-from sklearn.utils import class_weight
 
 from utils.config import (DATA_PATH, DATABASES, DESIRED_FEATURES_PATH,
-                          MODELS_PATH, OUTPUTS, SELECTIONS)
+                          MODELS_PATH)
 
 def dump_to_file(path, name, obj):
   with open(os.path.join(path, name + ".pkl"), "wb") as f:

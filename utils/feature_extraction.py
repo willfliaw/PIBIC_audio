@@ -10,18 +10,10 @@ from tqdm import tqdm
 from utils.config import HOP_LENGTH, N_FFT, N_MELS, N_MFCC, SR, WINDOW
 
 def extract_features1d(data, sr = SR, n_fft = N_FFT, hop_length = HOP_LENGTH, n_mfcc = N_MFCC, n_mels = N_MELS, window = WINDOW):
-  features = {}
-  mfccs = [[], [], [], [], [], [], [], [], [], [], [], [], []]
-  deltas = [[], [], [], [], [], [], [], [], [], [], [], [], []]
-  d_deltas = [[], [], [], [], [], [], [], [], [], [], [], [], []]
-  chromas = [[], [], [], [], [], [], [], [], [], [], [], []]
-  zcrs = []
-  spec_cents = []
-  spec_rolls = []
-  rmses = []
-  energies = []
-  f0s = []
-  tessitures = []
+  features = dict()
+  mfccs, deltas, d_deltas = [[] for i in range(13)], [[] for i in range(13)], [[] for i in range(13)]
+  chromas = [[] for i in range(12)]
+  zcrs, spec_cents, spec_rolls, rmses, energies, f0s, tessitures = list(), list(), list(), list(), list(), list(), list()
 
   for i in tqdm(range(len(data)), ncols = 50):
     audio = data[i]
@@ -73,9 +65,7 @@ def compute_hsf(features_vect):
   features_hsf = {}
   for i in features_vect:
     if i != "tessiture":
-      feature_mean = []
-      feature_var = []
-      feature_max = []
+      feature_mean, feature_var, feature_max = list(), list(), list()
       for j in features_vect[i]:
         feature_mean.append(np.nanmean(j))
         feature_var.append(np.nanvar(j))

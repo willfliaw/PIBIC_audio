@@ -22,8 +22,7 @@ def features1d_selection(database, n_select, *selection):
     X = data.drop([next(iter(utils.OUTPUTS[database]))], axis = 1)
     categorical_y = utils.translate_labels(data[next(iter(utils.OUTPUTS[database]))])
   else:
-    X_concat = []
-    categorical_y_concat = []
+    X_concat, categorical_y_concat = list(), list()
     for db in utils.OUTPUTS:
       features = pd.read_csv(os.path.join(utils.DATA_PATH, "general", "features", "1d", db + "_features.csv"), index_col = 0)
       info = pd.read_csv(os.path.join(utils.DATA_PATH, "general", "info", db + "_info.csv"), index_col = 0)
@@ -61,8 +60,7 @@ def eval_selected_features(database, *mods):
     X = data.drop([next(iter(utils.OUTPUTS[database]))], axis = 1)
     categorical_y = utils.translate_labels(data[next(iter(utils.OUTPUTS[database]))])
   else:
-    X_concat = []
-    categorical_y_concat = []
+    X_concat, categorical_y_concat = list(), list()
     for db in utils.OUTPUTS:
       features = pd.read_csv(os.path.join(utils.DATA_PATH, "general", "features", "1d", db + "_features.csv"), index_col = 0)
       info = pd.read_csv(os.path.join(utils.DATA_PATH, "general", "info", db + "_info.csv"), index_col = 0)

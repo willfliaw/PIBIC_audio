@@ -1,7 +1,6 @@
 # preprocess_data.py
 
 import os
-import sys
 
 import utils
 
@@ -13,7 +12,7 @@ def preprocessing(database = "all", write_inf = "y", write_d1 = "y", write_d2 = 
     os.makedirs(os.path.join(utils.DATA_PATH, "general", "info"), exist_ok = True)
     if database == "all":
       for db, aud, inf in zip(utils.DATABASES, audio, info):
-          inf.to_csv(os.path.join(utils.DATA_PATH, "general", "info", db + "_info.csv"))
+        inf.to_csv(os.path.join(utils.DATA_PATH, "general", "info", db + "_info.csv"))
     elif database in utils.DATABASES:
       info.to_csv(os.path.join(utils.DATA_PATH, "general", "info", database + "_info.csv"))
 
